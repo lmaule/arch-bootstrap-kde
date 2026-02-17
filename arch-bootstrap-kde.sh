@@ -75,24 +75,6 @@ pacman -S --noconfirm \
 
 systemctl enable sddm
 
-# -----------------------------
-# pipx and CLI tools
-# -----------------------------
-echo "Installing pipx..."
-
-# Ensure pip exists
-pacman -S --noconfirm python python-pip
-
-# Install pipx using pip (reliable method)
-sudo -u "$TARGET_USER" python -m pip install --user pipx
-
-# Add pipx to PATH
-sudo -u "$TARGET_USER" python -m pipx ensurepath
-
-# Install tools
-sudo -u "$TARGET_USER" ~/.local/bin/pipx install tldr || true
-sudo -u "$TARGET_USER" ~/.local/bin/pipx install yt-dlp || true
-
 
 # -----------------------------
 # 4) Multimedia and AMD stack
