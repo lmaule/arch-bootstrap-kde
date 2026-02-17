@@ -71,13 +71,14 @@ pacman -Syy
 
 
 # -----------------------------
-# 2) KDE Plasma and login manager
+# KDE Plasma (minimal)
 # -----------------------------
-section "Install KDE Plasma and SDDM"
+echo "Installing KDE Plasma (minimal)..."
 
 pacman -S --noconfirm \
-  plasma-meta \
-  kde-applications-meta \
+  plasma-desktop \
+  plasma-workspace \
+  kde-system-meta \
   sddm \
   konsole \
   dolphin \
@@ -86,9 +87,6 @@ pacman -S --noconfirm \
   okular \
   gwenview \
   discover
-
-systemctl enable sddm
-
 
 # -----------------------------
 # 4) Multimedia and AMD stack
@@ -147,40 +145,6 @@ pacman -S --noconfirm \
 systemctl enable --now libvirtd
 
 usermod -aG libvirt "${TARGET_USER}"
-
-# -----------------------------
-# XRDP install (repo or AUR)
-# -----------------------------
-echo "Installing XRDP..."
-
-if pacman -Si xrdp &>/dev/null; then
-
-    echo "Installing XRDP from official repo..."
-    pacman -S --noconfirm xrdp
-
-else
-
-    echo "XRDP not found in repo, installing from AUR..."
-
-    # Install yay if not present
-    if ! command -v yay &>/dev/null; then
-        sudo -u "$TARGET_USER" bash <<EOF
-cd ~
-rm -rf yay
-git clone https://aur.archlinux.org/yay.git
-cd yay
-makepkg -si --noconfirm
-EOF
-    fi
-
-    # Install xrdp from AUR
-    sudo -u "$TARGET_USER" yay -S --noconfirm xrdp
-
-fi
-
-# Enable services
-systemctl enable xrdp
-systemctl enable xrdp-sesman
 
 # -----------------------------
 # 8) Boot target
