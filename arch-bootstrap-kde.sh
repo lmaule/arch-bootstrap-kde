@@ -57,6 +57,20 @@ pacman -S --noconfirm \
   ffmpeg
 
 # -----------------------------
+# Enable multilib
+# -----------------------------
+echo "Enabling multilib..."
+
+if ! grep -q "^\[multilib\]" /etc/pacman.conf; then
+    echo "multilib repo section missing from pacman.conf"
+fi
+
+sed -i '/^\#\[multilib\]/,/^\#Include/s/^#//' /etc/pacman.conf
+
+pacman -Syy
+
+
+# -----------------------------
 # 2) KDE Plasma and login manager
 # -----------------------------
 section "Install KDE Plasma and SDDM"
