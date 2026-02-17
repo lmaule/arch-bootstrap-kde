@@ -50,7 +50,7 @@ pacman -Syu --noconfirm
 
 pacman -S --noconfirm \
   curl wget git base-devel fastfetch btop htop \
-  python python-pip pipx \
+  python python-pip \
   flatpak \
   distrobox \
   vlc \
