@@ -53,7 +53,6 @@ pacman -S --noconfirm \
   python python-pip pipx \
   flatpak \
   distrobox \
-  xrdp \
   vlc \
   ffmpeg
 
@@ -77,14 +76,23 @@ pacman -S --noconfirm \
 systemctl enable sddm
 
 # -----------------------------
-# 3) Python CLI tools
+# pipx and CLI tools
 # -----------------------------
-section "Python CLI tools"
+echo "Installing pipx..."
 
-sudo -u "${TARGET_USER}" pipx ensurepath || true
+# Ensure pip exists
+pacman -S --noconfirm python python-pip
 
-sudo -u "${TARGET_USER}" pipx install --include-deps tldr || true
-sudo -u "${TARGET_USER}" pipx install --include-deps yt-dlp || true
+# Install pipx using pip (reliable method)
+sudo -u "$TARGET_USER" python -m pip install --user pipx
+
+# Add pipx to PATH
+sudo -u "$TARGET_USER" python -m pipx ensurepath
+
+# Install tools
+sudo -u "$TARGET_USER" ~/.local/bin/pipx install tldr || true
+sudo -u "$TARGET_USER" ~/.local/bin/pipx install yt-dlp || true
+
 
 # -----------------------------
 # 4) Multimedia and AMD stack
@@ -143,6 +151,40 @@ pacman -S --noconfirm \
 systemctl enable --now libvirtd
 
 usermod -aG libvirt "${TARGET_USER}"
+
+# -----------------------------
+# XRDP install (repo or AUR)
+# -----------------------------
+echo "Installing XRDP..."
+
+if pacman -Si xrdp &>/dev/null; then
+
+    echo "Installing XRDP from official repo..."
+    pacman -S --noconfirm xrdp
+
+else
+
+    echo "XRDP not found in repo, installing from AUR..."
+
+    # Install yay if not present
+    if ! command -v yay &>/dev/null; then
+        sudo -u "$TARGET_USER" bash <<EOF
+cd ~
+rm -rf yay
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si --noconfirm
+EOF
+    fi
+
+    # Install xrdp from AUR
+    sudo -u "$TARGET_USER" yay -S --noconfirm xrdp
+
+fi
+
+# Enable services
+systemctl enable xrdp
+systemctl enable xrdp-sesman
 
 # -----------------------------
 # 8) Boot target
