@@ -54,7 +54,10 @@ pacman -S --noconfirm \
   flatpak \
   distrobox \
   vlc \
-  ffmpeg
+# Full FFmpeg codec support
+pacman -S --noconfirm ffmpeg \
+  x264 x265 libvpx dav1d svt-av1 libaom \
+  opus lame libvorbis libwebp libass || true
 
 # -----------------------------
 # Enable multilib
