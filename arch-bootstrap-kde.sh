@@ -84,7 +84,6 @@ pacman -S --noconfirm \
   kde-system-meta \
   sddm \
   konsole \
-  dolphin \
   spectacle \
   ark \
   okular \
