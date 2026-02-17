@@ -154,6 +154,7 @@ usermod -aG libvirt "${TARGET_USER}"
 section "Boot configuration"
 
 systemctl set-default graphical.target
+systemctl enable sddm
 
 # -----------------------------
 # Finish
