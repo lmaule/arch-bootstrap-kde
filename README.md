@@ -2,7 +2,7 @@
 
 This script installs the Linux Gamer Life KDE Plasma environment on a fresh Arch Linux system. It is designed to be run once from TTY after completing a minimal Arch install using archinstall.
 
-The script installs KDE Plasma, AMD graphics support, gaming tools, Flatpak apps, virtualization support, multimedia codecs, and configures the system to boot into a graphical desktop.
+The script installs KDE Plasma, Nvidia graphics support, gaming tools, Flatpak apps, virtualization support, multimedia codecs, and configures the system to boot into a graphical desktop.
 
 The end result is a complete KDE desktop ready for gaming, content creation, and daily use.
 
@@ -115,8 +115,9 @@ Enter your password when prompted.
 The script will install and configure:
 
 - KDE Plasma desktop  
-- SDDM display manager  
-- AMD Mesa and Vulkan drivers  
+- SDDM display manager
+- CachyOS Kernel  
+- Nvidia Drivers
 - Steam  
 - Lutris  
 - OBS Studio  
