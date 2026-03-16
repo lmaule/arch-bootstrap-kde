@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# LHM Arch Bootstrap (TTY friendly)
+# Linux Gamer Life Arch Bootstrap (TTY friendly)
 # Goal: Start from Arch minimal (TTY), run once, reboot into KDE Plasma.
 # -----------------------------
-# Colours (LHM style)
+# Colours (LGL style)
 # -----------------------------
 GREEN='\033[38;2;0;255;0m'
 ORANGE='\033[38;2;255;153;0m'
@@ -59,47 +59,7 @@ fi
 sed -i '/^\#\[multilib\]/,/^\#Include/s/^#//' /etc/pacman.conf
 pacman -Syy
 # -----------------------------
-# 2) CachyOS kernel
-# -----------------------------
-section "CachyOS kernel"
-# Add CachyOS repo signing keys
-pacman-key --recv-keys F3B607488DB35A47 --keyserver keyserver.ubuntu.com
-pacman-key --lsign-key F3B607488DB35A47
-# Install CachyOS repo package
-pacman -U --noconfirm \
-  'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-keyring-20240331-1-any.pkg.tar.zst' \
-  'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-mirrorlist-18-1-any.pkg.tar.zst' \
-  'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-v3-mirrorlist-18-1-any.pkg.tar.zst' \
-  'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-repo-1-1-any.pkg.tar.zst'
-# Add CachyOS repos to pacman.conf if not already present
-if ! grep -q "^\[cachyos\]" /etc/pacman.conf; then
-  cat >> /etc/pacman.conf << 'EOF'
-
-[cachyos-v3]
-Include = /etc/pacman.d/cachyos-v3-mirrorlist
-
-[cachyos]
-Include = /etc/pacman.d/cachyos-mirrorlist
-EOF
-fi
-pacman -Syy
-# Install CachyOS kernel and headers
-pacman -S --noconfirm \
-  linux-cachyos \
-  linux-cachyos-headers
-# Update bootloader to include new kernel entry
-if command -v grub-mkconfig &>/dev/null; then
-  grub-mkconfig -o /boot/grub/grub.cfg
-  info "GRUB config updated for CachyOS kernel."
-elif command -v bootctl &>/dev/null; then
-  bootctl update
-  info "systemd-boot updated for CachyOS kernel."
-else
-  warn "Could not detect bootloader. Update your bootloader manually to include linux-cachyos."
-fi
-info "CachyOS kernel installed."
-# -----------------------------
-# 3) Paru AUR helper
+# 2) Paru AUR helper
 # -----------------------------
 section "Installing Paru AUR helper"
 if command -v paru &>/dev/null; then
@@ -113,7 +73,7 @@ else
   info "Paru installed successfully."
 fi
 # -----------------------------
-# 4) KDE Plasma (minimal)
+# 3) KDE Plasma (minimal)
 # -----------------------------
 section "KDE Plasma"
 pacman -S --noconfirm \
@@ -128,7 +88,7 @@ pacman -S --noconfirm \
   gwenview \
   discover
 # -----------------------------
-# 5) Multimedia and Nvidia Beta stack
+# 4) Multimedia and Nvidia Beta stack
 # -----------------------------
 section "Multimedia and Nvidia Beta drivers"
 pacman -S --noconfirm \
@@ -144,7 +104,7 @@ pacman -S --noconfirm \
   gst-plugins-ugly \
   gst-libav
 # -----------------------------
-# 6) Gaming tools
+# 5) Gaming tools
 # -----------------------------
 section "Gaming tools"
 pacman -S --noconfirm \
@@ -152,7 +112,7 @@ pacman -S --noconfirm \
   lutris \
   mangohud
 # -----------------------------
-# 7) Flatpak apps
+# 6) Flatpak apps
 # -----------------------------
 section "Flatpak apps"
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -163,14 +123,14 @@ flatpak install -y flathub org.onlyoffice.desktopeditors
 flatpak install -y flathub io.github.lact_ui
 flatpak install -y flathub io.github.lawstorant.boxflat
 # -----------------------------
-# 8) AUR apps
+# 7) AUR apps
 # -----------------------------
 section "AUR apps"
 sudo -u "${TARGET_USER}" paru -S --noconfirm coolercontrol
 systemctl enable --now coolercontrold
 info "CoolerControl installed."
 # -----------------------------
-# 9) Virtualization
+# 8) Virtualization
 # -----------------------------
 section "Virtualization"
 pacman -S --noconfirm \
@@ -184,7 +144,7 @@ pacman -S --noconfirm \
 systemctl enable --now libvirtd
 usermod -aG libvirt "${TARGET_USER}"
 # -----------------------------
-# 10) Boot target
+# 9) Boot target
 # -----------------------------
 section "Boot configuration"
 systemctl set-default graphical.target
