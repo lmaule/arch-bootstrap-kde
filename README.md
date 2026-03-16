@@ -83,7 +83,7 @@ sudo pacman -S wget
 Run:
 
 ```bash
-wget https://tinyurl.com/lgl-arch-kde
+wget https://tinyurl.com/mthk2c76
 ```
 
 This downloads the script to your current directory.
